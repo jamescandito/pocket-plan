@@ -20,6 +20,7 @@ const savingsTargetInput = document.querySelector("#savings-target");
 const expenseList = document.querySelector("#expense-list");
 const saveStatus = document.querySelector("#save-status");
 const remainingCard = document.querySelector("#remaining-card");
+const stickySummary = document.querySelector("#sticky-summary");
 const state = {
   income: "",
   incomePeriod: "monthly",
@@ -139,15 +140,19 @@ function renderSummary() {
   const remaining = income - expenses - monthlySavingsTarget;
 
   document.querySelector("#summary-income").textContent = formatCurrency(income);
+  document.querySelector("#sticky-income").textContent = formatCurrency(income);
   document.querySelector("#income-summary-caption").textContent = state.incomePeriod === "annual"
     ? "Estimated monthly take-home"
     : "Take-home pay";
   document.querySelector("#summary-expenses").textContent = formatCurrency(expenses);
+  document.querySelector("#sticky-expenses").textContent = formatCurrency(expenses);
   document.querySelector("#summary-remaining").textContent = formatCurrency(remaining);
+  document.querySelector("#sticky-remaining").textContent = formatCurrency(remaining);
   document.querySelector("#remaining-caption").textContent = remaining < 0
     ? "More planned than your income"
     : "After expenses and savings";
   remainingCard.classList.toggle("negative", remaining < 0);
+  document.querySelector("#sticky-remaining-card").classList.toggle("negative", remaining < 0);
   document.querySelector("#income-symbol").textContent = currencySymbols[state.currency];
   document.querySelector("#annual-salary-symbol").textContent = currencySymbols[state.currency];
   document.querySelector("#savings-symbol").textContent = currencySymbols[state.currency];
@@ -592,3 +597,10 @@ document.addEventListener("keydown", (event) => {
 
 readSavedBudget();
 render();
+
+const summaryObserver = new IntersectionObserver(([entry]) => {
+  const showStickySummary = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+  stickySummary.classList.toggle("is-visible", showStickySummary);
+  stickySummary.setAttribute("aria-hidden", String(!showStickySummary));
+}, { threshold: 0 });
+summaryObserver.observe(document.querySelector(".summary-grid"));
