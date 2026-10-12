@@ -758,6 +758,69 @@ h3 {
   text-decoration: underline;
 }
 
+.savings-progress-panel {
+  margin-top: 20px;
+}
+
+.savings-outlook-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.savings-outlook-metric {
+  min-width: 0;
+}
+
+.savings-outlook-metric > span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.savings-outlook-metric strong {
+  display: block;
+  margin: 9px 0;
+  color: var(--green-dark);
+  font-size: 25px;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.savings-outlook-metric p,
+.savings-projection-note {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.savings-outlook-metric progress {
+  width: 100%;
+  height: 8px;
+  accent-color: var(--green);
+}
+
+.savings-guidance {
+  margin: 20px 0 12px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--green-pale);
+  color: var(--green-dark);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.savings-guidance.off-target {
+  background: var(--orange-pale);
+  color: #82512d;
+}
+
+@media (max-width: 620px) {
+  .savings-outlook-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
 .page-footer {
   padding-top: 18px;
   text-align: center;

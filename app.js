@@ -137,7 +137,7 @@ function renderSummary() {
     (total, expense) => total + amountOrZero(expense.amount),
     0,
   );
-  const remaining = income - expenses - monthlySavingsTarget;
+  const remaining = income - expenses;
 
   document.querySelector("#summary-income").textContent = formatCurrency(income);
   document.querySelector("#sticky-income").textContent = formatCurrency(income);
@@ -150,7 +150,7 @@ function renderSummary() {
   document.querySelector("#sticky-remaining").textContent = formatCurrency(remaining);
   document.querySelector("#remaining-caption").textContent = remaining < 0
     ? "More planned than your income"
-    : "After expenses and savings";
+    : "Available to save after expenses";
   remainingCard.classList.toggle("negative", remaining < 0);
   document.querySelector("#sticky-remaining-card").classList.toggle("negative", remaining < 0);
   document.querySelector("#income-symbol").textContent = currencySymbols[state.currency];
@@ -159,6 +159,7 @@ function renderSummary() {
   document.querySelector("#savings-monthly").textContent = formatCurrency(monthlySavingsTarget);
   document.querySelector("#savings-yearly").textContent = formatCurrency(annualSavingsTarget);
   document.querySelector("#estimated-monthly-income").textContent = formatCurrency(income);
+  renderSavingsProgress(remaining, monthlySavingsTarget);
 
   document.querySelectorAll(".expense-percentage").forEach((percentage, index) => {
     const expenseAmount = amountOrZero(state.expenses[index].amount);
@@ -177,6 +178,35 @@ function renderSummary() {
     percentage.textContent = `${value}%`;
     percentage.setAttribute("aria-label", `${value}% of monthly income`);
   });
+}
+
+function renderSavingsProgress(remaining, target, today = new Date()) {
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const monthsRemaining = 11 - month + (daysInMonth - today.getDate() + 1) / daysInMonth;
+  const savings = Math.max(0, remaining);
+  const progress = target > 0 ? savings / target * 100 : 0;
+  const shortfall = Math.max(0, target - remaining);
+  document.querySelector("#savings-progress-percent").textContent = target > 0
+    ? `${Number(progress.toFixed(1))}%`
+    : "—";
+  document.querySelector("#savings-progress-bar").value = Math.min(100, progress);
+  document.querySelector("#savings-progress-caption").textContent = target > 0
+    ? `Of your ${formatCurrency(target)} monthly target`
+    : "Set a savings target above to see your progress.";
+  document.querySelector("#savings-year-end").textContent = formatCurrency(savings * monthsRemaining);
+  document.querySelector("#savings-year-end-label").textContent = `By December 31, ${year}`;
+  document.querySelector("#savings-projection-note").textContent =
+    `Additional savings from ${today.toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })} through year-end, including today and a prorated current month. Based on ${formatCurrency(savings)} available to save each month; excludes savings already accumulated.`;
+  document.querySelector("#savings-annual-projection").textContent = formatCurrency(remaining * 12);
+  const guidance = document.querySelector("#savings-guidance");
+  guidance.classList.toggle("off-target", target > 0 && shortfall > 0);
+  guidance.textContent = target <= 0
+    ? "Choose a monthly or annual target in Make a plan to see how your savings compare."
+    : shortfall > 0
+      ? `Reduce monthly expenses by ${formatCurrency(Math.round(shortfall * 100) / 100)} to meet your savings target.${shortfall > monthlyIncome() - remaining ? " Meeting this target will also require more income, even if you eliminate all expenses." : ""}`
+      : "You’re on track to meet your savings target. Keep your current spending plan going.";
 }
 
 function renderExpenses() {

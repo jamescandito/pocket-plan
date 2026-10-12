@@ -182,6 +182,35 @@
         </div>
       </section>
 
+      <section class="budget-panel savings-progress-panel" aria-labelledby="savings-progress-title">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">See your progress</p>
+            <h2 id="savings-progress-title">Your savings outlook</h2>
+          </div>
+        </div>
+        <div class="savings-outlook-grid" aria-live="polite" aria-atomic="true">
+          <div class="savings-outlook-metric">
+            <span>Monthly target achieved</span>
+            <strong id="savings-progress-percent">—</strong>
+            <progress id="savings-progress-bar" max="100" value="0" aria-label="Monthly savings target achieved"></progress>
+            <p id="savings-progress-caption">Set a savings target above to see your progress.</p>
+          </div>
+          <div class="savings-outlook-metric">
+            <span id="savings-year-end-label">By December 31</span>
+            <strong id="savings-year-end">$0.00</strong>
+            <p>Projected additional savings this year</p>
+          </div>
+          <div class="savings-outlook-metric">
+            <span>At this pace over 12 months</span>
+            <strong id="savings-annual-projection">$0.00</strong>
+            <p>Left this month × 12</p>
+          </div>
+        </div>
+        <p id="savings-guidance" class="savings-guidance" role="status"></p>
+        <p id="savings-projection-note" class="savings-projection-note"></p>
+      </section>
+
       <footer class="page-footer">
         <p>Your budget stays in this browser. It isn’t sent to a server.</p>
       </footer>
