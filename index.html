@@ -6,8 +6,8 @@
     <meta name="theme-color" content="#f5f7f2">
     <meta name="description" content="A simple monthly budget calculator that saves privately in your browser.">
     <title>Monthly Budget — Pocket Plan</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="app.js" defer></script>
+    <link rel="stylesheet" href="styles.css?v=daily-container-9">
+    <script src="app.js?v=daily-guidance-3" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -180,6 +180,39 @@
           <p id="save-status" class="save-status" role="status" aria-live="polite">Saved on this device</p>
           <button id="clear-budget" class="text-button" type="button">Clear budget</button>
         </div>
+      </section>
+
+      <section class="budget-panel savings-progress-panel daily-rate-panel" aria-labelledby="daily-rate-title">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Plan your day</p>
+            <h2 id="daily-rate-title">Your daily rate</h2>
+          </div>
+        </div>
+        <div class="savings-outlook-grid" aria-live="polite" aria-atomic="true">
+          <div class="savings-outlook-metric">
+            <span>Daily total budget</span>
+            <strong id="daily-total-budget">$0.00</strong>
+          </div>
+          <div class="savings-outlook-metric">
+            <span>Daily average spend</span>
+            <strong id="daily-average-spend">$0.00</strong>
+          </div>
+          <div class="savings-outlook-metric daily-remaining-metric">
+            <div class="daily-remaining-pair">
+              <div>
+                <span>Left to spend each day</span>
+                <strong id="daily-remaining">$0.00</strong>
+              </div>
+              <div>
+                <span>Left to spend each month</span>
+                <strong id="daily-remaining-monthly">$0.00</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p id="daily-rate-guidance" class="savings-guidance" role="status"></p>
+        <p class="savings-projection-note">Daily estimates use 30.4 days per month. Annual savings goals are converted to monthly targets first.</p>
       </section>
 
       <section class="budget-panel savings-progress-panel" aria-labelledby="savings-progress-title">

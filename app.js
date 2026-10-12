@@ -160,6 +160,7 @@ function renderSummary() {
   document.querySelector("#savings-yearly").textContent = formatCurrency(annualSavingsTarget);
   document.querySelector("#estimated-monthly-income").textContent = formatCurrency(income);
   renderSavingsProgress(remaining, monthlySavingsTarget);
+  renderDailyRate(income, monthlySavingsTarget, expenses);
 
   document.querySelectorAll(".expense-percentage").forEach((percentage, index) => {
     const expenseAmount = amountOrZero(state.expenses[index].amount);
@@ -178,6 +179,21 @@ function renderSummary() {
     percentage.textContent = `${value}%`;
     percentage.setAttribute("aria-label", `${value}% of monthly income`);
   });
+}
+
+function renderDailyRate(income, monthlySavingsTarget, expenses) {
+  const dailyBudget = (income - monthlySavingsTarget) / 30.4;
+  const dailySpend = expenses / 30.4;
+  const dailyRemaining = dailyBudget - dailySpend;
+  document.querySelector("#daily-total-budget").textContent = formatCurrency(dailyBudget);
+  document.querySelector("#daily-average-spend").textContent = formatCurrency(dailySpend);
+  document.querySelector("#daily-remaining").textContent = formatCurrency(dailyRemaining);
+  document.querySelector("#daily-remaining-monthly").textContent = formatCurrency(dailyRemaining * 30.4);
+  const guidance = document.querySelector("#daily-rate-guidance");
+  guidance.classList.toggle("off-target", dailyRemaining < 0);
+  guidance.textContent = dailyRemaining < 0
+    ? `Your planned spending is ${formatCurrency(-dailyRemaining)} per day over the budget needed to meet your savings goal.`
+    : `You have ${formatCurrency(dailyRemaining)} available to spend per day while still meeting your savings goal.`;
 }
 
 function renderSavingsProgress(remaining, target, today = new Date()) {
